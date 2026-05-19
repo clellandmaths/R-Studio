@@ -1,0 +1,573 @@
+---
+title: "Higher Applications of Mathematics: R Studio Workbook"
+format: html
+filters:
+  - webr
+webr:
+  show-startup-message: false
+  resources:
+    - coffee_shop.csv
+    - house_prices.csv
+    - gym_members.csv
+    - student_data.csv
+    - fast_food_data.csv
+    - diet_study.csv
+    - exam_scores.csv
+---
+
+## About this guide 
+
+This guide will help you complete the practical work for the statistics component of your course. You'll learn how to use R Studio to load data, calculate key statistics, create visualizations, and perform common statistical tests.
+
+Using software is an essential skill, but the most important part is understanding **what** you are doing, **why** you are doing it, and **what your results mean**.
+
+
+## Loading a Dataset to R Studio 
+
+The first steps in R Studio are always the same, no matter what analysis you want to run.
+
+Because we are running this in the browser, your teacher has already loaded the data for you! You don't need to set a working directory. Just run the `read.csv` code.
+
+**Enter the code to load your data:** In the editor below, run the following code:
+
+```{webr-r}
+# This tells R Studio to read the file and name it 'coffee'
+coffee <- read.csv("coffee_shop.csv") 
+
+# This attaches the variable names (like 'Age', 'Gender', etc.) 
+attach(coffee) 
+
+# This optional line shows the first 6 rows of your data 
+head(coffee)
+```
+
+*To run each line of code, click the Run button.*
+
+## Descriptive Statistics
+Let's inspect the `coffee_shop.csv` data. It contains data for a sample of coffee shop customers:
+
+| Variable | Data Type | Description |
+| :--- | :--- | :--- |
+| CustomerID | Numerical (Discrete) | A unique ID for each customer |
+| Age | Numerical (Discrete) | Age of the customer in years |
+| Gender | Categorical | Customer's gender (M/F) |
+| VisitFrequency | Categorical | How often they visit (Daily, Weekly, Monthly) |
+| Spent | Numerical (Continuous) | Average amount spent per week |
+
+Now, let's calculate some basic descriptive statistics for the numerical variables. Enter the following commands one at a time in your R script and run them:
+
+```{webr-r}
+# Calculate the mean (average) age 
+mean(Age) 
+
+# Calculate the median (middle value) of age 
+median(Age) 
+
+# Calculate the standard deviation of age 
+sd(Age)
+```
+
+**Task:** What does the `summary(Age)` command give you? Try it now.
+
+```{webr-r}
+summary(Age)
+```
+
+You should see the Min (minimum), 1st Qu. (first quartile), Median, Mean, 3rd Qu. (third quartile), and Max (maximum) values. This is a very useful command!
+
+Now, try finding the Interquartile Range (IQR) for the amount Spent:
+
+```{webr-r}
+IQR(Spent)
+```
+
+**Challenge:** Can you work out how to calculate the semi-interquartile range (SIQR)? (Hint: It's just the IQR divided by 2)
+
+```{webr-r}
+
+```
+
+### 🏋️ Exercise 1
+Load the file `house_prices.csv`. Give it a sensible name (e.g., houses) and remember to `attach()` the variable names.
+
+Use the code below to calculate statistics for the Age of the houses:
+
+```{webr-r}
+mean(Age) 
+sd(Age) 
+summary(Age) 
+IQR(Age)
+```
+
+Now calculate the same set of descriptive statistics for the Price of the houses.
+
+```{webr-r}
+
+```
+
+## 📦 Boxplots
+In this activity, we're going to use the `gym_members.csv` file.
+
+Because we are running this in the browser, your teacher has already loaded the data for you! You don't need to set a working directory. Just run the `read.csv` code.
+
+Import the file:
+
+```{webr-r}
+# Import the dataset and name it 'gym' 
+gym <- read.csv("gym_members.csv") 
+
+# Attach the variable names 
+attach(gym)
+```
+
+Now, let's create a simple boxplot for the Age of gym members:
+
+```{webr-r}
+# Creates a horizontal boxplot for Age with a title 
+boxplot(Age, main="Age of Gym Members", horizontal=TRUE)
+```
+
+### Customizing Your Boxplot
+We can easily add more detail, like axis labels and colour:
+
+```{webr-r}
+# Adds an x-axis label (xlab) and a color (col) 
+boxplot(Age, main="Age of Gym Members", horizontal=TRUE, xlab="Years", col="lightblue")
+```
+
+### ⚖️ Creating Comparative Boxplots
+Boxplots are most powerful when comparing two or more groups. Let's compare the ages of male and female members.
+
+We use the tilde symbol `~` to do this. The formula is `Numerical_Variable ~ Categorical_Variable`.
+
+```{webr-r}
+# Create a boxplot of Age *by* Gender 
+boxplot(Age~Gender, main="Age of Gym Members", horizontal=TRUE, xlab="Years", ylab="Gender", col="lightblue")
+```
+
+**💡 Quick Question:** Look at the plot. What do the small circles indicate?
+
+*Answer: These are outliers. They are data points that fall significantly outside the range of the other data in that group. R identifies and plots them individually.*
+
+### Handling Categorical Data
+Look back at your `gym_members.csv` file.
+What type of data is Gender?
+It's categorical.
+We can't find a "mean" gender, but we can count how many members are in each category.
+
+In R Studio, use the `table()` command to get a simple frequency count:
+
+```{webr-r}
+table(Gender)
+```
+
+### 🏋️ Exercise 2
+For this exercise, you'll need the `student_data.csv` file.
+
+1. Detach old data:
+
+```{webr-r}
+# Detach the 'gym' dataset 
+detach(gym)
+```
+
+2. Load `student_data.csv`:
+
+```{webr-r}
+students <- read.csv("student_data.csv") 
+attach(students) 
+head(students)
+```
+
+3. Produce summary data for Height and StudyHours.
+
+```{webr-r}
+
+```
+
+4. Produce a boxplot for StudyHours.
+
+```{webr-r}
+
+```
+
+5. Produce a comparative boxplot to compare the Height of students based on their smoking status (Smokes).
+
+```{webr-r}
+
+```
+
+## 📋 Tables in R Studio
+You can create frequency tables in R Studio or Excel. For simple counts, R Studio is very fast.
+
+Let's re-load our `coffee_shop.csv` dataset:
+
+```{webr-r}
+coffee <- read.csv("coffee_shop.csv") 
+attach(coffee)
+```
+
+To create a simple frequency table counting the VisitFrequency:
+
+```{webr-r}
+table(VisitFrequency)
+```
+
+To create a contingency table (two-way table) showing visit frequency by gender:
+
+```{webr-r}
+table(Gender, VisitFrequency)
+```
+
+### Tables with Proportions and Percentages
+To calculate proportions in a table:
+
+```{webr-r}
+prop.table(table(VisitFrequency))
+```
+
+To show percentages, multiply by 100:
+
+```{webr-r}
+prop.table(table(VisitFrequency)) * 100
+```
+
+## 📊 Histograms
+Histograms are an excellent way to quickly check the distribution of numerical data (for example, to see if it's normally distributed, i.e., "bell-shaped").
+
+Load the file `student_data.csv` into R Studio. Give it a name and attach the variables:
+
+```{webr-r}
+students <- read.csv("student_data.csv") 
+attach(students) 
+head(students)
+```
+
+Now, enter `hist(Height)` to generate the histogram:
+
+```{webr-r}
+hist(Height)
+```
+
+### 🏋️ Exercise 3
+1. Using the `student_data.csv` file, generate histograms for StudyHours and Pulse.
+
+```{webr-r}
+
+```
+
+2. Describe the shape of the distribution for each. Do they appear broadly normally distributed?
+
+3. Now, use the same code to generate a histogram for Smokes: `hist(Smokes)`
+
+```{webr-r}
+hist(Smokes)
+```
+
+4. Explain why you got an error message. *(Hint: What type of data is Smokes? What kind of data do histograms require?)*
+
+## 📈 Scattergraphs
+Scattergraphs (or scatterplots) are used to visualize the relationship, if any, between two numerical variables.
+
+Let's use the `student_data.csv` dataset to see if there is a relationship between study hours and pulse rate:
+
+```{webr-r}
+plot(StudyHours, Pulse, main="Study Hours vs. Pulse Rate")
+```
+
+Looking at the plot, we can see a negative linear relationship. As study hours increase, the pulse rate tends to decrease.
+
+### 🏋️ Exercise 4
+1. Load the file `fast_food_data.csv`, attach the variable names, and check the first six lines.
+
+```{webr-r}
+
+```
+
+2. What relationship would you expect between Fat and Calories? Produce a scatterplot to check this.
+
+```{webr-r}
+
+```
+
+3. Would you expect a relationship between Sodium (salt) and Sugar content? Produce a scatterplot to check.
+
+```{webr-r}
+
+```
+
+## 🧮 Correlation and Linear Regression
+The scatterplot shows us the direction of a relationship, but the correlation coefficient (r) tells us its strength (from -1, perfect negative, to +1, perfect positive).
+
+### Correlation
+Let's continue with our `student_data.csv` example.
+
+Always start with a scattergraph to visually check that a linear relationship exists. Calculate the correlation coefficient (r):
+
+```{webr-r}
+cor(StudyHours, Pulse)
+```
+*This shows a moderate negative correlation.*
+
+Test for statistical significance:
+
+```{webr-r}
+cor.test(StudyHours, Pulse)
+```
+
+**Interpreting the output:**
+* The p-value is 2.74e-09. This is scientific notation for $2.74 \times 10^{-9}$, which is a very small number.
+* Since p < 0.05, we can reject the null hypothesis. The result is statistically significant.
+* **We can conclude there is a statistically significant, moderate, negative linear relationship between study hours and pulse rate.**
+
+### Linear Regression
+Now that we know a significant relationship exists, we can apply a linear regression model, or "line of best fit".
+
+Generate the model:
+
+```{webr-r}
+lm(Pulse ~ StudyHours)
+```
+
+* R gives us the (Intercept) c and the gradient (StudyHours) m.
+* The line of best fit is: `y = -1.896x + 89.684`
+* Or: `Pulse = -1.896 × StudyHours + 89.684`
+
+Fit the line to the graph:
+
+```{webr-r}
+# First, run the plot again 
+plot(StudyHours, Pulse, main="Study Hours vs. Pulse Rate") 
+
+# Now, add the line 
+abline(lm(Pulse ~ StudyHours), col="red")
+```
+
+Check the 'goodness of fit' (R²):
+
+```{webr-r}
+summary(lm(Pulse ~ StudyHours))
+```
+
+* Our R² value is 0.3859 (or 38.6%).
+* **This tells us that 38.6% of the variation in students' pulse rates can be explained by the variation in their study hours.**
+
+### 🎯 Making Predictions
+We can use our model to predict a pulse rate for a given number of study hours.
+
+Let's predict the pulse rate for a student who studies 10 hours per week:
+
+```{webr-r}
+predict(lm(Pulse~StudyHours), newdata=data.frame(StudyHours=10), interval="pred")
+```
+
+**Interpretation:**
+* **fit:** The single best-fit prediction is 70.7
+* **lwr/upr:** This is the 95% prediction interval. We are 95% confident that an individual student who studies 10 hours will have a pulse rate between 61.4 and 80.1
+
+### 🏋️ Exercise 5
+*(Use the `fast_food_data.csv` file for this exercise)*
+
+1. Generate a labelled scattergraph showing Fat on the x-axis and Calories on the y-axis.
+
+```{webr-r}
+
+```
+
+2. Calculate the correlation coefficient (r). Comment on the direction, strength, and statistical significance.
+
+```{webr-r}
+
+```
+
+3. Apply a linear regression line to your graph and write down the equation.
+
+```{webr-r}
+
+```
+
+4. Calculate the coefficient of determination (R²) and comment on what this tells us.
+
+```{webr-r}
+
+```
+
+5. a) Predict the calorie value for a menu item with 34g of fat. b) Predict the calorie value for a menu item with 65g of fat.
+
+```{webr-r}
+
+```
+
+6. Comment on which prediction is more likely to be accurate and why. *(Hint: This is about extrapolation.)*
+
+## 🔬 t-tests
+A t-test is a significance test used to compare the means of two samples of numerical data.
+
+There are two main types:
+1. **Paired t-test:** Used when the two samples are related (e.g., before/after measurements).
+2. **Independent t-test:** Used when the two samples are separate and unrelated.
+
+### Paired t-test Example
+A group of 15 participants joined a diet program. We measured weight before and after.
+* **Alternative Hypothesis:** Mean weight after < mean weight before
+* **Null Hypothesis:** No effect on mean weight
+
+Let's run the test:
+
+```{webr-r}
+diet <- read.csv("diet_study.csv") 
+attach(diet) 
+head(diet) 
+t.test(WeightBefore, WeightAfter, paired=TRUE)
+```
+
+**Interpreting the output:**
+* p-value: 3.71e-07 is much less than 0.05
+* Conclusion: Result is statistically significant. We reject the null hypothesis.
+* Mean weight loss was 4.7 kg
+* 95% CI: [3.5, 5.8] kg (entirely positive, confirming significant weight loss)
+
+### 🏋️ Exercise 6
+A teacher wants to compare exam results from two classes using different teaching methods.
+
+1. Load `exam_scores.csv`
+
+```{webr-r}
+
+```
+
+2. Write suitable null and experimental hypotheses.
+3. Should this be paired or independent? Why?
+4. Run the correct t-test.
+
+```{webr-r}
+
+```
+
+5. Comment on the findings.
+
+## ⚖️ z-tests (Test of Two Proportions)
+We use a z-test when our data is categorical and we want to compare proportions of two groups.
+
+Example: Comparing university plans between two schools:
+* School A: 30 out of 50 students said "Yes"
+* School B: 38 out of 60 students said "Yes"
+
+For this test, we don't need a CSV file:
+
+```{webr-r}
+prop.test(x=c(30, 38), n=c(50, 60))
+```
+
+**Interpretation:**
+* Proportions: 60% (School A) vs 63.3% (School B)
+* p-value: 0.7801 > 0.05
+* Conclusion: Not significant. We fail to reject the null hypothesis.
+* 95% CI includes zero, confirming no significant difference
+
+### 🏋️ Exercise 7
+Two driving instructors are comparing pass rates:
+* Instructor 1: 25 out of 35 pupils passed
+* Instructor 2: 22 out of 37 pupils passed
+
+Is there a significant difference? Run a z-test and interpret the results.
+
+```{webr-r}
+
+```
+
+## ❓ R Studio Troubleshooting
+R Studio can be fussy, especially when you're starting. The number one rule is: **DON'T PANIC! 99% of all errors are small typos.**
+
+### 😟 Problem: "I can't load my file!"
+You get an error like 'cannot open file' or 'No such file or directory'.
+
+*Note: Because we are using WebR in this interactive document, your teacher has already pre-loaded the datasets for you! You do not need to set a working directory.*
+
+If you are still getting file loading errors, try these solutions:
+* **Check the File Name:** R is case-sensitive. "student_data.csv" ≠ "Student_Data.csv"
+* **Add the .csv Extension:** Must include in your code
+* **Check Your Quotes:** Must use straight quotes `""`
+
+### 😟 Problem: "My file is loaded, but mean(Age) doesn't work!"
+You get 'object not found' errors.
+
+💡 **Solutions:**
+* Did you `attach()` the data?
+* Did you `attach()` the right thing? Names must match
+* Check variable spelling with `head()`
+
+### 😟 Problem: "My plot or test command isn't working!"
+💡 **Solutions:**
+* **Comma vs. Tilde (~):** Use `~` for comparisons (like boxplots/models), comma for correlations and scatterplots.
+* **Check Data Types:** Can't calculate mean of categorical data
+* **Check Variable Order:** `lm(Y ~ X)` vs `plot(X, Y)`
+
+## 📚 R Code Cheat Sheet
+Here's a one-page summary of the most common commands:
+
+### 1. Loading and Viewing Data
+```{webr-r}
+mydata <- read.csv("MyFile.csv") 
+attach(mydata) 
+head(mydata)
+```
+
+### 2. Descriptive Statistics
+```{webr-r}
+summary(y) 
+mean(y) 
+median(y) 
+sd(y) 
+IQR(y)
+```
+
+### 3. Tables
+```{webr-r}
+table(x) 
+table(x, y) 
+prop.table(table(x)) * 100
+```
+
+### 4. Visualizations
+```{webr-r}
+hist(y) 
+boxplot(y) 
+boxplot(y ~ x) 
+plot(x, y)
+```
+
+### 5. Correlation and Regression
+```{webr-r}
+cor(x, y) 
+cor.test(x,y) 
+model <- lm(y ~ x) 
+
+# Gives R²
+summary(model) 
+
+# Adds line to plot
+abline(model, col="red")
+
+predict(model, newdata=data.frame(x=Value), interval="pred")
+```
+
+### 6. Hypothesis Tests
+```{webr-r}
+# Paired t-test: 
+t.test(before, after, paired=TRUE) 
+
+# Independent t-test:
+t.test(GroupA, GroupB) 
+
+# z-test (Proportions): 
+prop.test(x=c(a, b), n=c(n1, n2))
+```
+
+## 📌 Important Notes
+* **Data Files:** Always use the 'datafile.csv’ files to match this guide's outputs.
+* **Statistical Significance:** p < 0.05 means statistically significant
+* **Correlation ≠ Causation:** Even strong correlations don't prove cause and effect
+* **Check Assumptions:** Always visualize data before running tests
+
+Good luck with your statistical analysis!
