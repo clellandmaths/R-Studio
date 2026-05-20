@@ -2294,7 +2294,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>Now, re-load the student data, attach it, and check the variables: * <code>students &lt;- read.csv("student_data.csv")</code> * <code>attach(students)</code> * <code>head(students)</code></p>
 <div id="qwebr-insertion-location-39"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Always start with a scattergraph to visually check that a linear relationship exists. Calculate the correlation coefficient (r) by typing <code>cor(StudyHours, Pulse)</code> :</p>
+<p>Always start with a scattergraph to visually check that a linear relationship exists. Produce a scatterplot of Pulse On StudyHours :</p>
 <div id="qwebr-insertion-location-40"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p><em>This shows a moderate negative correlation.</em></p>
@@ -2411,7 +2411,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>Now, load the diet data and run the test. Type the following commands into the block below: * <code>diet &lt;- read.csv("diet_study.csv")</code> * <code>attach(diet)</code> * <code>head(diet)</code> * <code>t.test(WeightBefore, WeightAfter, paired=TRUE)</code></p>
 <div id="qwebr-insertion-location-54"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p><strong>Interpreting the output:</strong> * p-value: 3.71e-07 is much less than 0.05 * Conclusion: Result is statistically significant. We reject the null hypothesis. * Mean weight loss was 4.7 kg * 95% CI: [3.5, 5.8] kg (entirely positive, confirming significant weight loss)</p>
+<p><strong>Interpreting the output:</strong> * p-value: 1.007e-07 is much less than 0.05 * Conclusion: Result is statistically significant. We reject the null hypothesis. * Mean weight loss was 4.6 kg * 95% CI: [3.6, 5.6] kg (entirely positive, confirming significant weight loss)</p>
 </section>
 <section id="exercise-6" class="level3" data-number="9.2">
 <h3 data-number="9.2" class="anchored" data-anchor-id="exercise-6"><span class="header-section-number">9.2</span> 🏋️ Exercise 6</h3>
@@ -2453,7 +2453,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>For this test, we don’t need a CSV file. Just type the following code: <code>prop.test(x=c(30, 38), n=c(50, 60))</code></p>
 <div id="qwebr-insertion-location-58"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p><strong>Interpretation:</strong> * Proportions: 60% (School A) vs 63.3% (School B) * p-value: 0.7801 &gt; 0.05 * Conclusion: Not significant. We fail to reject the null hypothesis. * 95% CI includes zero, confirming no significant difference</p>
+<p><strong>Interpretation:</strong> * Proportions: 60% (School A) vs 63.3% (School B) * p-value: 0.8719 &gt; 0.05 * Conclusion: Not significant. We fail to reject the null hypothesis. * 95% CI includes zero, confirming no significant difference</p>
 <section id="exercise-7" class="level3" data-number="10.1">
 <h3 data-number="10.1" class="anchored" data-anchor-id="exercise-7"><span class="header-section-number">10.1</span> 🏋️ Exercise 7</h3>
 <p>Two driving instructors are comparing pass rates: * Instructor 1: 25 out of 35 pupils passed * Instructor 2: 22 out of 37 pupils passed</p>
