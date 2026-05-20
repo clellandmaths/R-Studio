@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Higher Applications of Mathematics: R Studio Workbook</title>
+<title>Higher Applications Of Maths R Studio Workbook</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -1984,8 +1984,8 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Higher Applications of Mathematics: R Studio Workbook</h1>
-<p class="subtitle lead">clellandmaths</p>
+<h1 class="title">Higher Applications Of Maths<br>R Studio Workbook</h1>
+<p class="subtitle lead">ClellandMaths</p>
 </div>
 
 
@@ -2002,6 +2002,11 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </header>
 
 
+<div style="text-align: left; margin-top: 10px; margin-bottom: 40px;">
+  <div style="background-color: #000000; display: inline-flex; align-items: center; justify-content: center; width: 150px; height: 150px; border-radius: 10px; padding: 10px;">
+    <img src="https://raw.githubusercontent.com/clellandmaths/R-Studio/main/logo.webp" alt="Clelland Maths" style="max-width: 100%; max-height: 100%;">
+  </div>
+</div>
 <div id="qwebr-insertion-location-1"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="about-this-guide" class="level2" data-number="1">
@@ -2014,7 +2019,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>The first steps in R Studio are always the same, no matter what analysis you want to run.</p>
 <p>Because we are running this in the browser, your teacher has already loaded the data for you! You don’t need to set a working directory.</p>
 <p><strong>Note on Running Code:</strong> In this workbook, clicking the “Run” button will execute <strong>all the code in the box</strong> at the same time. Also, because we don’t have an “Environment” tab to view our files, you should always add <code>head(your_file)</code> to the bottom of your box if you want to see a visual output to prove your data loaded!</p>
-<p><strong>Enter the code to load your data:</strong> In the empty code block below, type the following three lines of code exactly as they appear. * <code>coffee &lt;- read.csv("coffee_shop.csv")</code> * <code>attach(coffee)</code> * <code>head(coffee)</code></p>
+<p><strong>Enter the code to load your data:</strong> In the empty code block below, type the following three lines of code exactly as they appear.</p>
+<ul>
+<li><code>coffee &lt;- read.csv("coffee_shop.csv")</code></li>
+<li><code>attach(coffee)</code></li>
+<li><code>head(coffee)</code></li>
+</ul>
 <div id="qwebr-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p><em>To run your code, click the Run button.</em></p>
@@ -2063,7 +2073,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </tr>
 </tbody>
 </table>
-<p>Now, let’s calculate some basic descriptive statistics for the numerical variables. Type the following commands one at a time into the empty block below and run them: * <code>mean(Age)</code> * <code>median(Age)</code> * <code>sd(Age)</code></p>
+<p>Now, let’s calculate some basic descriptive statistics for the numerical variables. Type the following commands one at a time into the empty block below and run them:</p>
+<ul>
+<li><code>mean(Age)</code></li>
+<li><code>median(Age)</code></li>
+<li><code>sd(Age)</code></li>
+</ul>
 <div id="qwebr-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p><strong>Task:</strong> What does the summary command give you? Type <code>summary(Age)</code> into the box below and run it.</p>
@@ -2094,10 +2109,21 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>Type <code>reset()</code> into the box below and run it:</p>
 <div id="qwebr-insertion-location-7"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Now, load the file <code>house_prices.csv</code>. Give it a sensible name (e.g., houses), attach the variable names, and look at the first 6 lines. Type the following: * <code>houses &lt;- read.csv("house_prices.csv")</code> * <code>attach(houses)</code> * <code>head(houses)</code></p>
+<p>Now, load the file <code>house_prices.csv</code>. Give it a sensible name (e.g., houses), attach the variable names, and look at the first 6 lines. Type the following:</p>
+<ul>
+<li><code>houses &lt;- read.csv("house_prices.csv")</code></li>
+<li><code>attach(houses)</code></li>
+<li><code>head(houses)</code></li>
+</ul>
 <div id="qwebr-insertion-location-8"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Use the code block below to calculate statistics for the Age of the houses. Type: * <code>mean(Age)</code> * <code>sd(Age)</code> * <code>summary(Age)</code> * <code>IQR(Age)</code></p>
+<p>Use the code block below to calculate statistics for the Age of the houses. Type:</p>
+<ul>
+<li><code>mean(Age)</code></li>
+<li><code>sd(Age)</code></li>
+<li><code>summary(Age)</code></li>
+<li><code>IQR(Age)</code></li>
+</ul>
 <div id="qwebr-insertion-location-9"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Now calculate the same set of descriptive statistics for the <strong>Price</strong> of the houses.</p>
@@ -2123,7 +2149,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div id="qwebr-insertion-location-11"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Now, import the new file and inspect the variables by typing the following three commands: * <code>gym &lt;- read.csv("gym_members.csv")</code> * <code>attach(gym)</code> * <code>head(gym)</code></p>
+<p>Now, import the new file and inspect the variables by typing the following three commands:</p>
+<ul>
+<li><code>gym &lt;- read.csv("gym_members.csv")</code></li>
+<li><code>attach(gym)</code></li>
+<li><code>head(gym)</code></li>
+</ul>
 <div id="qwebr-insertion-location-12"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Now, let’s create a simple boxplot for the Age of gym members. Type the following into the box: <code>boxplot(Age, main="Age of Gym Members", horizontal=TRUE)</code></p>
@@ -2216,7 +2247,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div id="qwebr-insertion-location-22"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Now, load, attach, and inspect the coffee data. Type the following: * <code>coffee &lt;- read.csv("coffee_shop.csv")</code> * <code>attach(coffee)</code> * <code>head(coffee)</code></p>
+<p>Now, load, attach, and inspect the coffee data. Type the following:</p>
+<ul>
+<li><code>coffee &lt;- read.csv("coffee_shop.csv")</code></li>
+<li><code>attach(coffee)</code></li>
+<li><code>head(coffee)</code></li>
+</ul>
 <div id="qwebr-insertion-location-23"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>To create a simple frequency table counting the VisitFrequency, type <code>table(VisitFrequency)</code> :</p>
@@ -2254,7 +2290,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div id="qwebr-insertion-location-28"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Now, give the new data a name, attach the variables, and look at the first 6 rows: * <code>students &lt;- read.csv("student_data.csv")</code> * <code>attach(students)</code> * <code>head(students)</code></p>
+<p>Now, give the new data a name, attach the variables, and look at the first 6 rows:</p>
+<ul>
+<li><code>students &lt;- read.csv("student_data.csv")</code></li>
+<li><code>attach(students)</code></li>
+<li><code>head(students)</code></li>
+</ul>
 <div id="qwebr-insertion-location-29"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Now, enter <code>hist(Height)</code> to generate the histogram:</p>
@@ -2303,7 +2344,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div id="qwebr-insertion-location-34"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Now, type the following commands to load the new data, attach the variable names, and check the first six lines: * <code>fastfood &lt;- read.csv("fast_food_data.csv")</code> * <code>attach(fastfood)</code> * <code>head(fastfood)</code></p>
+<p>Now, type the following commands to load the new data, attach the variable names, and check the first six lines:</p>
+<ul>
+<li><code>fastfood &lt;- read.csv("fast_food_data.csv")</code></li>
+<li><code>attach(fastfood)</code></li>
+<li><code>head(fastfood)</code></li>
+</ul>
 <div id="qwebr-insertion-location-35"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <ol type="1">
@@ -2339,7 +2385,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div id="qwebr-insertion-location-38"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Now, re-load the student data, attach it, and check the variables: * <code>students &lt;- read.csv("student_data.csv")</code> * <code>attach(students)</code> * <code>head(students)</code></p>
+<p>Now, re-load the student data, attach it, and check the variables:</p>
+<ul>
+<li><code>students &lt;- read.csv("student_data.csv")</code></li>
+<li><code>attach(students)</code></li>
+<li><code>head(students)</code></li>
+</ul>
 <div id="qwebr-insertion-location-39"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Always start with a scattergraph to visually check that a linear relationship exists. Produce a scatterplot of Pulse On StudyHours :</p>
@@ -2399,7 +2450,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div id="qwebr-insertion-location-46"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Now load and inspect the fast food data. Type the following: * <code>fastfood &lt;- read.csv("fast_food_data.csv")</code> * <code>attach(fastfood)</code> * <code>head(fastfood)</code></p>
+<p>Now load and inspect the fast food data. Type the following:</p>
+<ul>
+<li><code>fastfood &lt;- read.csv("fast_food_data.csv")</code></li>
+<li><code>attach(fastfood)</code></li>
+<li><code>head(fastfood)</code></li>
+</ul>
 <div id="qwebr-insertion-location-47"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <ol type="1">
@@ -2456,10 +2512,22 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div id="qwebr-insertion-location-53"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Now, load the diet data and run the test. Type the following commands into the block below: * <code>diet &lt;- read.csv("diet_study.csv")</code> * <code>attach(diet)</code> * <code>head(diet)</code> * <code>t.test(WeightBefore, WeightAfter, paired=TRUE)</code></p>
+<p>Now, load the diet data and run the test. Type the following commands into the block below:</p>
+<ul>
+<li><code>diet &lt;- read.csv("diet_study.csv")</code></li>
+<li><code>attach(diet)</code></li>
+<li><code>head(diet)</code></li>
+<li><code>t.test(WeightBefore, WeightAfter, paired=TRUE)</code></li>
+</ul>
 <div id="qwebr-insertion-location-54"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p><strong>Interpreting the output:</strong> * p-value: 1.007e-07 is much less than 0.05 * Conclusion: Result is statistically significant. We reject the null hypothesis. * Mean weight loss was 4.6 kg * 95% CI: [3.6, 5.6] kg (entirely positive, confirming significant weight loss)</p>
+<p><strong>Interpreting the output:</strong></p>
+<ul>
+<li>p-value: 1.007e-07 is much less than 0.05</li>
+<li>Conclusion: Result is statistically significant. We reject the null hypothesis.</li>
+<li>Mean weight loss was 4.6 kg</li>
+<li>95% CI: [3.6, 5.6] kg (entirely positive, confirming significant weight loss)</li>
+</ul>
 </section>
 <section id="exercise-6" class="level3" data-number="9.2">
 <h3 data-number="9.2" class="anchored" data-anchor-id="exercise-6"><span class="header-section-number">9.2</span> 🏋️ Exercise 6</h3>
@@ -2479,7 +2547,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div id="qwebr-insertion-location-55"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Load <code>exam_scores.csv</code>, attach it, and view the variables. Type: * <code>exams &lt;- read.csv("exam_scores.csv")</code> * <code>attach(exams)</code> * <code>head(exams)</code></p>
+<p>Load <code>exam_scores.csv</code>, attach it, and view the variables. Type:</p>
+<ul>
+<li><code>exams &lt;- read.csv("exam_scores.csv")</code></li>
+<li><code>attach(exams)</code></li>
+<li><code>head(exams)</code></li>
+</ul>
 <div id="qwebr-insertion-location-56"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <ol type="1">
@@ -2497,14 +2570,28 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <section id="z-tests-test-of-two-proportions" class="level2" data-number="10">
 <h2 data-number="10" class="anchored" data-anchor-id="z-tests-test-of-two-proportions"><span class="header-section-number">10</span> ⚖️ z-tests (Test of Two Proportions)</h2>
 <p>We use a z-test when our data is categorical and we want to compare proportions of two groups.</p>
-<p>Example: Comparing university plans between two schools: * School A: 30 out of 50 students said “Yes” * School B: 38 out of 60 students said “Yes”</p>
+<p>Example: Comparing university plans between two schools:</p>
+<ul>
+<li>School A: 30 out of 50 students said “Yes”</li>
+<li>School B: 38 out of 60 students said “Yes”</li>
+</ul>
 <p>For this test, we don’t need a CSV file. Just type the following code: <code>prop.test(x=c(30, 38), n=c(50, 60))</code></p>
 <div id="qwebr-insertion-location-58"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p><strong>Interpretation:</strong> * Proportions: 60% (School A) vs 63.3% (School B) * p-value: 0.8719 &gt; 0.05 * Conclusion: Not significant. We fail to reject the null hypothesis. * 95% CI includes zero, confirming no significant difference</p>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li>Proportions: 60% (School A) vs 63.3% (School B)</li>
+<li>p-value: 0.8719 &gt; 0.05</li>
+<li>Conclusion: Not significant. We fail to reject the null hypothesis.</li>
+<li>95% CI includes zero, confirming no significant difference</li>
+</ul>
 <section id="exercise-7" class="level3" data-number="10.1">
 <h3 data-number="10.1" class="anchored" data-anchor-id="exercise-7"><span class="header-section-number">10.1</span> 🏋️ Exercise 7</h3>
-<p>Two driving instructors are comparing pass rates: * Instructor 1: 25 out of 35 pupils passed * Instructor 2: 22 out of 37 pupils passed</p>
+<p>Two driving instructors are comparing pass rates:</p>
+<ul>
+<li>Instructor 1: 25 out of 35 pupils passed</li>
+<li>Instructor 2: 22 out of 37 pupils passed</li>
+</ul>
 <p>Is there a significant difference? Run a z-test and interpret the results.</p>
 <div id="qwebr-insertion-location-59"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
@@ -2664,9 +2751,21 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <b>✅ Click here to reveal the written answers</b>
 </summary>
 <p><br></p>
-<p><strong>(a) (i) Measures of Location &amp; Spread</strong><br> Because the data is normally distributed, we use the <strong>mean</strong> and <strong>standard deviation</strong>. <br> Code: <code>mean(Current)</code>, <code>sd(Current)</code>, <code>mean(New)</code>, <code>sd(New)</code><br> <strong>Answers:</strong> * Current: Mean = 270.275m, SD = 8.75m * New: Mean = 267.5m, SD = 9.897m</p>
-<p><strong>(a) (ii) Comparisons</strong><br> * On average, the distances travelled by the current golf balls are further (270.275 &gt; 267.5). * The distances travelled by the new golf balls are more varied / spread out than the current balls (9.897 &gt; 8.75).</p>
-<p><strong>(b) Hypotheses</strong><br> * <strong>Null Hypothesis:</strong> There is no difference in the mean distances travelled by the current and new golf balls. * <strong>Alternative Hypothesis:</strong> There is a difference in the mean distances travelled by the current and new golf balls.</p>
+<p><strong>(a) (i) Measures of Location &amp; Spread</strong><br> Because the data is normally distributed, we use the <strong>mean</strong> and <strong>standard deviation</strong>. <br> Code: <code>mean(Current)</code>, <code>sd(Current)</code>, <code>mean(New)</code>, <code>sd(New)</code><br> <strong>Answers:</strong></p>
+<ul>
+<li>Current: Mean = 270.275m, SD = 8.75m</li>
+<li>New: Mean = 267.5m, SD = 9.897m</li>
+</ul>
+<p><strong>(a) (ii) Comparisons</strong><br></p>
+<ul>
+<li>On average, the distances travelled by the current golf balls are further (270.275 &gt; 267.5).</li>
+<li>The distances travelled by the new golf balls are more varied / spread out than the current balls (9.897 &gt; 8.75).</li>
+</ul>
+<p><strong>(b) Hypotheses</strong><br></p>
+<ul>
+<li><strong>Null Hypothesis:</strong> There is no difference in the mean distances travelled by the current and new golf balls.</li>
+<li><strong>Alternative Hypothesis:</strong> There is a difference in the mean distances travelled by the current and new golf balls.</li>
+</ul>
 <p><strong>(c) (i) Test Selection</strong><br> An independent (two-sample) t-test.</p>
 <p><strong>(c) (ii) Hypothesis Test</strong><br> Code: <code>t.test(Current, New)</code><br> <strong>Answer:</strong> p-value = <code>0.188</code></p>
 <strong>(c) (iii) Interpretation</strong><br> The p-value is greater than 0.05 (0.188 &gt; 0.05), therefore we fail to reject the null hypothesis. There is insufficient evidence to suggest a significant difference in the mean distances travelled by the current and new golf balls.
@@ -2901,6 +3000,8 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <li><strong>Check Assumptions:</strong> Always visualize data (e.g.&nbsp;histograms/scattergraphs) before running tests to ensure it is appropriate to do so.</li>
 </ul>
 <p>Good luck with your statistical analysis!</p>
+<p><strong>Acknowledgments</strong><br>
+<em>While the datasets and interactive coding elements in this workbook are original, the pedagogical structure and sequence are heavily based on R Studio guides developed by Ardrossan Academy.</em></p>
 </section>
 
 </main>
