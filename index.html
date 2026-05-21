@@ -1691,6 +1691,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#extra-commands-not-in-data-booklet" id="toc-extra-commands-not-in-data-booklet" class="nav-link" data-scroll-target="#extra-commands-not-in-data-booklet">🛠️ Extra Commands (Not in Data Booklet)</a></li>
   <li><a href="#important-notes" id="toc-important-notes" class="nav-link" data-scroll-target="#important-notes">📌 Important Notes</a></li>
+  <li><a href="#other-higher-applications-of-maths-material" id="toc-other-higher-applications-of-maths-material" class="nav-link" data-scroll-target="#other-higher-applications-of-maths-material">Other Higher Applications Of Maths Material</a></li>
   </ul>
 </nav>
 </div>
@@ -2322,7 +2323,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <section id="scattergraphs" class="level2" data-number="7">
 <h2 data-number="7" class="anchored" data-anchor-id="scattergraphs"><span class="header-section-number">7</span> 📈 Scattergraphs</h2>
 <p>Scattergraphs (or scatterplots) are used to visualize the relationship, if any, between two numerical variables.</p>
-<p>Let’s use the student dataset to see if there is a relationship between study hours and pulse rate. Type the following code: <code>plot(StudyHours, Pulse, main="Study Hours vs. Pulse Rate")</code></p>
+<p>Let’s use the student dataset to see if there is a relationship between study hours and pulse rate. Type the following code: <code>plot(StudyHours, Pulse, main="Scatterplot of Pulse On Study Hours", xlab="Study Hours (hours)", ylab="Pulse (bmp)")</code></p>
 <div id="qwebr-insertion-location-33"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Looking at the plot, we can see a negative linear relationship. As study hours increase, the pulse rate tends to decrease.</p>
@@ -2400,7 +2401,12 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>Test for statistical significance by typing <code>cor.test(StudyHours, Pulse)</code> :</p>
 <div id="qwebr-insertion-location-41"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p><strong>Interpreting the output:</strong> * The p-value is 2.74e-09. This is scientific notation for <span class="math inline">\(2.74 \times 10^{-9}\)</span>, which is a very small number. * Since p &lt; 0.05, we can reject the null hypothesis. The result is statistically significant. * <strong>We can conclude there is a statistically significant, moderate, negative linear relationship between study hours and pulse rate.</strong></p>
+<p><strong>Interpreting the output:</strong></p>
+<ul>
+<li><p>The p-value is 2.74e-09. This is scientific notation for <span class="math inline">\(2.74 \times 10^{-9}\)</span>, which is a very small number.</p></li>
+<li><p>Since p &lt; 0.05, we can reject the null hypothesis. The result is statistically significant.</p></li>
+<li><p><strong>We can conclude there is a statistically significant, moderate, negative linear relationship between study hours and pulse rate.</strong></p></li>
+</ul>
 </section>
 <section id="linear-regression" class="level3" data-number="8.2">
 <h3 data-number="8.2" class="anchored" data-anchor-id="linear-regression"><span class="header-section-number">8.2</span> Linear Regression</h3>
@@ -2413,7 +2419,11 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <li>The line of best fit is: <code>y = -1.896x + 89.684</code></li>
 <li>Or: <code>Pulse = -1.896 × StudyHours + 89.684</code></li>
 </ul>
-<p>Fit the line to the graph by typing the following two lines of code: * <code>plot(StudyHours, Pulse, main="Study Hours vs. Pulse Rate")</code> * <code>abline(lm(Pulse ~ StudyHours), col="red")</code></p>
+<p>Fit the line to the graph by typing the following two lines of code:</p>
+<ul>
+<li><code>plot(StudyHours, Pulse, main="Study Hours vs. Pulse Rate")</code></li>
+<li><code>abline(lm(Pulse ~ StudyHours), col="red")</code></li>
+</ul>
 <div id="qwebr-insertion-location-43"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Check the ‘goodness of fit’ (R²) by typing <code>summary(lm(Pulse ~ StudyHours))</code> :</p>
@@ -2430,7 +2440,11 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>Let’s predict the pulse rate for a student who studies 10 hours per week. Type the following: <code>predict(lm(Pulse~StudyHours), newdata=data.frame(StudyHours=10), interval="pred")</code></p>
 <div id="qwebr-insertion-location-45"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p><strong>Interpretation:</strong> * <strong>fit:</strong> The single best-fit prediction is 70.7 * <strong>lwr/upr:</strong> This is the 95% prediction interval. We are 95% confident that an individual student who studies 10 hours will have a pulse rate between 61.4 and 80.1</p>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li><strong>fit:</strong> The single best-fit prediction is 70.7</li>
+<li><strong>lwr/upr:</strong> This is the 95% prediction interval. We are 95% confident that an individual student who studies 10 hours will have a pulse rate between 61.4 and 80.1</li>
+</ul>
 </section>
 <section id="exercise-5" class="level3" data-number="8.4">
 <h3 data-number="8.4" class="anchored" data-anchor-id="exercise-5"><span class="header-section-number">8.4</span> 🏋️ Exercise 5</h3>
@@ -2493,7 +2507,11 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <section id="t-tests" class="level2" data-number="9">
 <h2 data-number="9" class="anchored" data-anchor-id="t-tests"><span class="header-section-number">9</span> 🔬 t-tests</h2>
 <p>A t-test is a significance test used to compare the means of two samples of numerical data.</p>
-<p>There are two main types: 1. <strong>Paired t-test:</strong> Used when the two samples are related (e.g., before/after measurements). 2. <strong>Independent t-test:</strong> Used when the two samples are separate and unrelated.</p>
+<p>There are two main types:</p>
+<ol type="1">
+<li><strong>Paired t-test:</strong> Used when the two samples are related (e.g., before/after measurements).</li>
+<li><strong>Independent t-test:</strong> Used when the two samples are separate and unrelated.</li>
+</ol>
 <section id="paired-t-test-example" class="level3" data-number="9.1">
 <h3 data-number="9.1" class="anchored" data-anchor-id="paired-t-test-example"><span class="header-section-number">9.1</span> Paired t-test Example</h3>
 <p>A group of 15 participants joined a diet program. We measured weight before and after.</p>
@@ -3000,6 +3018,14 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <li><strong>Check Assumptions:</strong> Always visualize data (e.g.&nbsp;histograms/scattergraphs) before running tests to ensure it is appropriate to do so.</li>
 </ul>
 <p>Good luck with your statistical analysis!</p>
+</section>
+<section id="other-higher-applications-of-maths-material" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="other-higher-applications-of-maths-material">Other Higher Applications Of Maths Material</h2>
+<ul>
+<li><strong>Clelland Maths Website:</strong> <a href="https://www.clellandmaths.com" target="_blank"><b>👉 Clelland Maths Website</b></a></li>
+<li><strong>Clelland Maths App:</strong> <a href="https://app.clellandmaths.com" target="_blank"><b>👉 Clelland Maths App</b></a></li>
+<li><strong>Clelland Maths Youtube:</strong> <a href="https://www.youtube.com/clellandmaths" target="_blank"><b>👉 Clelland Maths YouTube</b></a></li>
+</ul>
 <p><strong>Acknowledgments</strong><br>
 <em>While the datasets and interactive coding elements in this workbook are original, the pedagogical structure and sequence are heavily based on R Studio guides developed by Ardrossan Academy.</em></p>
 </section>
