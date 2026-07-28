@@ -1,0 +1,7 @@
+# Quarto working files — regenerated on every render
+.quarto/
+*_cache/
+*.rmarkdown
+
+# NOTE: index_files/ is NOT ignored. It holds the CSS/JS the published
+# page loads, and must stay committed.

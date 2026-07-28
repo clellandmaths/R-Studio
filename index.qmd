@@ -1,0 +1,1199 @@
+---
+title: "Higher Applications Of Maths<br>R Studio Workbook"
+subtitle: "ClellandMaths"
+format: 
+  html:
+    theme: flatly
+    favicon: "https://raw.githubusercontent.com/clellandmaths/R-Studio/main/logo.webp"
+    toc: true
+    toc-location: left
+    toc-depth: 3
+    number-sections: true
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: false
+---
+
+```{=html}
+<div style="text-align: left; margin-top: 10px; margin-bottom: 40px;">
+  <div style="background-color: #000000; display: inline-flex; align-items: center; justify-content: center; width: 150px; height: 150px; border-radius: 10px; padding: 10px;">
+    <img src="https://raw.githubusercontent.com/clellandmaths/R-Studio/main/logo.webp" alt="Clelland Maths" style="max-width: 100%; max-height: 100%;">
+  </div>
+</div>
+```
+
+```{webr-r}
+#| context: setup
+base_url <- "https://raw.githubusercontent.com/clellandmaths/R-Studio/main/"
+files <- c("coffee_shop.csv", "house_prices.csv", "gym_members.csv", 
+           "student_data.csv", "fast_food_data.csv", "diet_study.csv", "exam_scores.csv", "Q3 Tyres.csv", "Q5 Radio.csv", "Q6 golf.csv", "Q5 Coffee.csv", "Q7 Jump.csv")
+
+for (f in files) {
+  download.file(paste0(base_url, f), f, quiet = TRUE)
+}
+
+# 1. Custom Reset function to wipe all datasets when moving to a new section
+reset <- function() {
+  clean <- FALSE
+  while(!clean) {
+    envs <- search()
+    attached_data <- envs[!grepl("^package:|^tools:|\\.GlobalEnv|Autoloads", envs)]
+    if(length(attached_data) == 0) { clean <- TRUE } 
+    else {
+      for(e in attached_data) { try(detach(e, character.only = TRUE), silent = TRUE) }
+    }
+  }
+  cat("🧹 All old data cleared! You are ready to load new data.\n")
+}
+
+# 2. Hijack the attach() command to stop students getting "masking" errors if they click Run twice!
+base_attach <- base::attach
+attach <- function(what, name = deparse(substitute(what)), ...) {
+  if (name %in% search()) {
+    suppressWarnings(base::detach(name, character.only = TRUE))
+  }
+  suppressWarnings(base_attach(what, name = name, ...))
+}
+```
+
+## About this guide 
+
+This guide will help you complete the practical work for the statistics component of your course. You'll learn how to use R Studio to load data, calculate key statistics, create visualizations, and perform common statistical tests.
+
+Using software is an essential skill, but the most important part is understanding **what** you are doing, **why** you are doing it, and **what your results mean**.
+
+
+## Loading a Dataset to R Studio 
+
+The first steps in R Studio are always the same, no matter what analysis you want to run.
+
+Because we are running this in the browser, your teacher has already loaded the data for you! You don't need to set a working directory. 
+
+**Note on Running Code:** In this workbook, clicking the "Run" button will execute **all the code in the box** at the same time. Also, because we don't have an "Environment" tab to view our files, you should always add `head(your_file)` to the bottom of your box if you want to see a visual output to prove your data loaded!
+
+**Enter the code to load your data:** In the empty code block below, type the following three lines of code exactly as they appear. 
+
+* `coffee <- read.csv("coffee_shop.csv")`
+* `attach(coffee)`
+* `head(coffee)`
+
+```{webr-r}
+
+```
+
+*To run your code, click the Run button.*
+
+## Descriptive Statistics
+Let's inspect the `coffee_shop.csv` data. It contains data for a sample of coffee shop customers:
+
+| Variable | Data Type | Description |
+| :--- | :--- | :--- |
+| CustomerID | Numerical (Discrete) | A unique ID for each customer |
+| Age | Numerical (Discrete) | Age of the customer in years |
+| Gender | Categorical | Customer's gender (M/F) |
+| VisitFrequency | Categorical | How often they visit (Daily, Weekly, Monthly) |
+| Spent | Numerical (Continuous) | Average amount spent per week |
+
+Now, let's calculate some basic descriptive statistics for the numerical variables. Type the following commands one at a time into the empty block below and run them:
+
+* `mean(Age)`
+* `median(Age)`
+* `sd(Age)`
+
+```{webr-r}
+
+```
+
+**Task:** What does the summary command give you? Type `summary(Age)` into the box below and run it.
+
+```{webr-r}
+
+```
+
+You should see the Min (minimum), 1st Qu. (first quartile), Median, Mean, 3rd Qu. (third quartile), and Max (maximum) values. This is a very useful command!
+
+Now, try finding the Interquartile Range (IQR) for the amount Spent. Type `IQR(Spent)` below:
+
+```{webr-r}
+
+```
+
+**Challenge:** Can you work out how to calculate the semi-interquartile range (SIQR)? (Hint: It's just the IQR divided by 2). Type your calculation below:
+
+```{webr-r}
+
+```
+
+### 🏋️ Exercise 1
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+**Why do we do this?** In R, if you open a new dataset that has the same column names (like 'Age') as your old dataset, R gets confused. We usually use the `detach()` command to fix this, but it can be hard to remember exactly which file you used last! To make life easier, we have created a custom command just for this workbook. Typing `reset()` will automatically find and wipe any old data for you!
+:::
+
+Type `reset()` into the box below and run it:
+
+```{webr-r}
+
+```
+
+Now, load the file `house_prices.csv`. Give it a sensible name (e.g., houses), attach the variable names, and look at the first 6 lines. Type the following:
+
+* `houses <- read.csv("house_prices.csv")`
+* `attach(houses)`
+* `head(houses)`
+
+```{webr-r}
+
+```
+
+Use the code block below to calculate statistics for the Age of the houses. Type:
+
+* `mean(Age)`
+* `sd(Age)`
+* `summary(Age)`
+* `IQR(Age)`
+
+```{webr-r}
+
+```
+
+Now calculate the same set of descriptive statistics for the **Price** of the houses.
+
+```{webr-r}
+
+```
+
+## 📦 Boxplots
+In this activity, we're going to use the `gym_members.csv` file.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+Now, import the new file and inspect the variables by typing the following three commands:
+
+* `gym <- read.csv("gym_members.csv")`
+* `attach(gym)`
+* `head(gym)`
+
+```{webr-r}
+
+```
+
+Now, let's create a simple boxplot for the Age of gym members. Type the following into the box: 
+`boxplot(Age, main="Age of Gym Members", horizontal=TRUE)`
+
+```{webr-r}
+
+```
+
+### Customizing Your Boxplot
+We can easily add more detail, like axis labels and colour. Type the following:
+`boxplot(Age, main="Age of Gym Members", horizontal=TRUE, xlab="Years", col="lightblue")`
+
+```{webr-r}
+
+```
+
+### ⚖️ Creating Comparative Boxplots
+Boxplots are most powerful when comparing two or more groups. Let's compare the ages of male and female members.
+
+We use the tilde symbol `~` to do this. The formula is `Numerical_Variable ~ Categorical_Variable`.
+
+Type the following code:
+`boxplot(Age~Gender, main="Age of Gym Members", horizontal=TRUE, xlab="Years", ylab="Gender", col="lightblue")`
+
+```{webr-r}
+
+```
+
+**💡 Quick Question:** Look at the plot. What do the small circles indicate?
+
+*Answer: These are outliers. They are data points that fall significantly outside the range of the other data in that group. R identifies and plots them individually.*
+
+### Handling Categorical Data
+Look back at your `gym_members.csv` file.
+What type of data is Gender?
+It's categorical.
+We can't find a "mean" gender, but we can count how many members are in each category.
+
+In R Studio, use the table command to get a simple frequency count. Type `table(Gender)` below:
+
+```{webr-r}
+
+```
+
+### 🏋️ Exercise 2
+For this exercise, you'll need the `student_data.csv` file.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+1. Load `student_data.csv`, attach it, and check the variable names by typing the following three lines:
+
+* `students <- read.csv("student_data.csv")`
+* `attach(students)`
+* `head(students)`
+
+```{webr-r}
+
+```
+
+2. Produce summary data for Height and StudyHours.
+
+```{webr-r}
+
+```
+
+3. Produce a boxplot for StudyHours.
+
+```{webr-r}
+
+```
+
+4. Produce a comparative boxplot to compare the Height of students based on their smoking status (Smokes).
+
+```{webr-r}
+
+```
+
+## 📋 Tables in R Studio
+You can create frequency tables in R Studio or Excel. For simple counts, R Studio is very fast.
+
+Let's re-load our `coffee_shop.csv` dataset. 
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+Now, load, attach, and inspect the coffee data. Type the following:
+
+* `coffee <- read.csv("coffee_shop.csv")`
+* `attach(coffee)`
+* `head(coffee)`
+
+```{webr-r}
+
+```
+
+To create a simple frequency table counting the VisitFrequency, type `table(VisitFrequency)` :
+
+```{webr-r}
+
+```
+
+To create a contingency table (two-way table) showing visit frequency by gender, type `table(Gender, VisitFrequency)` :
+
+```{webr-r}
+
+```
+
+### Tables with Proportions and Percentages
+To calculate proportions in a table, type `prop.table(table(VisitFrequency))` :
+
+```{webr-r}
+
+```
+
+To show percentages, multiply by 100. Type `prop.table(table(VisitFrequency)) * 100` :
+
+```{webr-r}
+
+```
+
+## 📊 Histograms
+Histograms are an excellent way to quickly check the distribution of numerical data (for example, to see if it's normally distributed, i.e., "bell-shaped").
+
+Let's use the `student_data.csv` file again. 
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+Now, give the new data a name, attach the variables, and look at the first 6 rows:
+
+* `students <- read.csv("student_data.csv")`
+* `attach(students)`
+* `head(students)`
+
+```{webr-r}
+
+```
+
+Now, enter `hist(Height)` to generate the histogram:
+
+```{webr-r}
+
+```
+
+### 🏋️ Exercise 3
+1. Using the student data you just loaded, generate histograms for StudyHours and Pulse.
+
+```{webr-r}
+
+```
+
+2. Describe the shape of the distribution for each. Do they appear broadly normally distributed?
+
+3. Now, try to generate a histogram for Smokes. Type `hist(Smokes)` below:
+
+```{webr-r}
+
+```
+
+4. Explain why you got an error message. *(Hint: What type of data is Smokes? What kind of data do histograms require?)*
+
+## 📈 Scattergraphs
+Scattergraphs (or scatterplots) are used to visualize the relationship, if any, between two numerical variables.
+
+Let's use the student dataset to see if there is a relationship between study hours and pulse rate. Type the following code:
+`plot(StudyHours, Pulse, main="Scatterplot of Pulse On Study Hours", xlab="Study Hours (hours)", ylab="Pulse (bmp)")`
+
+```{webr-r}
+
+```
+
+Looking at the plot, we can see a negative linear relationship. As study hours increase, the pulse rate tends to decrease.
+
+### 🏋️ Exercise 4
+For this exercise, we will use the `fast_food_data.csv` file. 
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+Now, type the following commands to load the new data, attach the variable names, and check the first six lines:
+
+* `fastfood <- read.csv("fast_food_data.csv")`
+* `attach(fastfood)`
+* `head(fastfood)`
+
+```{webr-r}
+
+```
+
+1. What relationship would you expect between Fat and Calories? Produce a scatterplot to check this.
+
+```{webr-r}
+
+```
+
+2. Would you expect a relationship between Sodium (salt) and Sugar content? Produce a scatterplot to check.
+
+```{webr-r}
+
+```
+
+## 🧮 Correlation and Linear Regression
+The scatterplot shows us the direction of a relationship, but the correlation coefficient (r) tells us its strength (from -1, perfect negative, to +1, perfect positive).
+
+### Correlation
+Let's switch back to our `student_data.csv` example. 
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+Now, re-load the student data, attach it, and check the variables:
+
+* `students <- read.csv("student_data.csv")`
+* `attach(students)`
+* `head(students)`
+
+```{webr-r}
+
+```
+
+Always start with a scattergraph to visually check that a linear relationship exists. Produce a scatterplot of Pulse On StudyHours :
+
+```{webr-r}
+
+```
+*This shows a moderate negative correlation.*
+
+Test for statistical significance by typing `cor.test(StudyHours, Pulse)` :
+
+```{webr-r}
+
+```
+
+**Interpreting the output:**
+
+* The p-value is 2.74e-09. This is scientific notation for $2.74 \times 10^{-9}$, which is a very small number.
+* Since p < 0.05, we can reject the null hypothesis. The result is statistically significant.
+
+* **We can conclude there is a statistically significant, moderate, negative linear relationship between study hours and pulse rate.**
+
+### Linear Regression
+Now that we know a significant relationship exists, we can apply a linear regression model, or "line of best fit".
+
+Generate the model by typing `lm(Pulse ~ StudyHours)` :
+
+```{webr-r}
+
+```
+
+* R gives us the (Intercept) c and the gradient (StudyHours) m.
+* The line of best fit is: `y = -1.896x + 89.684`
+* Or: `Pulse = -1.896 × StudyHours + 89.684`
+
+Fit the line to the graph by typing the following two lines of code:
+
+* `plot(StudyHours, Pulse, main="Study Hours vs. Pulse Rate")`
+* `abline(lm(Pulse ~ StudyHours), col="red")`
+
+```{webr-r}
+
+```
+
+Check the 'goodness of fit' (R²) by typing `summary(lm(Pulse ~ StudyHours))` :
+
+```{webr-r}
+
+```
+
+* Our R² value is 0.3859 (or 38.6%).
+* **This tells us that 38.6% of the variation in students' pulse rates can be explained by the variation in their study hours.**
+
+### 🎯 Making Predictions
+We can use our model to predict a pulse rate for a given number of study hours.
+
+Let's predict the pulse rate for a student who studies 10 hours per week. Type the following:
+`predict(lm(Pulse~StudyHours), newdata=data.frame(StudyHours=10), interval="pred")`
+
+```{webr-r}
+
+```
+
+**Interpretation:**
+
+* **fit:** The single best-fit prediction is 70.7
+* **lwr/upr:** This is the 95% prediction interval. We are 95% confident that an individual student who studies 10 hours will have a pulse rate between 61.4 and 80.1
+
+### 🏋️ Exercise 5
+*(Use the `fast_food_data.csv` file for this exercise)*
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+Now load and inspect the fast food data. Type the following:
+
+* `fastfood <- read.csv("fast_food_data.csv")`
+* `attach(fastfood)`
+* `head(fastfood)`
+
+```{webr-r}
+
+```
+
+1. Generate a labelled scattergraph showing Fat on the x-axis and Calories on the y-axis.
+
+```{webr-r}
+
+```
+
+2. Calculate the correlation coefficient (r). Comment on the direction, strength, and statistical significance.
+
+```{webr-r}
+
+```
+
+3. Apply a linear regression line to your graph and write down the equation.
+
+```{webr-r}
+
+```
+
+4. Calculate the coefficient of determination (R²) and comment on what this tells us.
+
+```{webr-r}
+
+```
+
+5. a) Predict the calorie value for a menu item with 34g of fat. b) Predict the calorie value for a menu item with 65g of fat.
+
+```{webr-r}
+
+```
+
+6. Comment on which prediction is more likely to be accurate and why. *(Hint: This is about extrapolation.)*
+
+## 🔬 t-tests
+A t-test is a significance test used to compare the means of two samples of numerical data.
+
+There are two main types:
+
+1. **Paired t-test:** Used when the two samples are related (e.g., before/after measurements).
+2. **Independent t-test:** Used when the two samples are separate and unrelated.
+
+### Paired t-test Example
+A group of 15 participants joined a diet program. We measured weight before and after.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+Now, load the diet data and run the test. Type the following commands into the block below:
+
+* `diet <- read.csv("diet_study.csv")`
+* `attach(diet)`
+* `head(diet)`
+* `t.test(WeightBefore, WeightAfter, paired=TRUE)`
+
+```{webr-r}
+
+```
+
+**Interpreting the output:**
+
+* p-value: 1.007e-07 is much less than 0.05
+* Conclusion: Result is statistically significant. We reject the null hypothesis.
+* Mean weight loss was 4.6 kg
+* 95% CI: [3.6, 5.6] kg (entirely positive, confirming significant weight loss)
+
+### 🏋️ Exercise 6
+A teacher wants to compare exam results from two classes using different teaching methods.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+Load `exam_scores.csv`, attach it, and view the variables. Type:
+
+* `exams <- read.csv("exam_scores.csv")`
+* `attach(exams)`
+* `head(exams)`
+
+```{webr-r}
+
+```
+
+1. Write suitable null and experimental hypotheses.
+2. Should this be paired or independent? Why?
+3. Run the correct t-test.
+
+```{webr-r}
+
+```
+
+4. Comment on the findings.
+
+## ⚖️ z-tests (Test of Two Proportions)
+We use a z-test when our data is categorical and we want to compare proportions of two groups.
+
+Example: Comparing university plans between two schools:
+
+* School A: 30 out of 50 students said "Yes"
+* School B: 38 out of 60 students said "Yes"
+
+For this test, we don't need a CSV file. Just type the following code:
+`prop.test(x=c(30, 38), n=c(50, 60))`
+
+```{webr-r}
+
+```
+
+**Interpretation:**
+
+* Proportions: 60% (School A) vs 63.3% (School B)
+* p-value: 0.8719 > 0.05
+* Conclusion: Not significant. We fail to reject the null hypothesis.
+* 95% CI includes zero, confirming no significant difference
+
+### 🏋️ Exercise 7
+Two driving instructors are comparing pass rates:
+
+* Instructor 1: 25 out of 35 pupils passed
+* Instructor 2: 22 out of 37 pupils passed
+
+Is there a significant difference? Run a z-test and interpret the results.
+
+```{webr-r}
+
+```
+
+## 📝 Past Paper Practice
+This section contains genuine SQA exam-style questions. In your assessment, you will be given a dataset and asked to perform statistical analysis, state your findings, and draw conclusions in context.
+
+### 2026 Paper: Question 3 (Tyres)
+A tyre manufacturer has collected data to investigate the relationship between the stopping distance (metres) and the tread depth (millimetres) of a new type of tyre. You must refer to the spreadsheet file `Q3 Tyres.csv` for the data.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember, we usually use `detach()` to clear data, but in this workbook we use our custom shortcut. Clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+**Setup:**
+Now load the file `Q3 Tyres.csv`, attach it, and show the first 6 lines to check the variable names. Type your code below:
+
+```{webr-r}
+
+```
+
+**(a) Construct a scatter plot of stopping distance on tread depth.**
+*(Hint: Stopping distance is the dependent 'y' variable, so it goes second in your plot command).*
+
+```{webr-r}
+
+```
+
+**(b) (i) Find the correlation coefficient between stopping distance and tread depth. (ii) Interpret the correlation coefficient.**
+
+```{webr-r}
+
+```
+*Write your interpretation (b ii) down on a piece of paper, just like in the real exam!*
+
+**(c) Find the equation of the regression line of stopping distance on tread depth.**
+
+```{webr-r}
+
+```
+
+**(d) Estimate the stopping distance for a tyre with a tread depth of 6.2 millimetres.**
+
+```{webr-r}
+
+```
+
+<br>
+
+#### Check Your Answers
+*Click the boxes below to reveal the answers and video walk-through!*
+
+<details>
+<summary><b>✅ Click here to reveal the written answers</b></summary>
+<br>
+**(a) Scatter Plot**<br>
+Code: `plot(Depth, Distance)`
+
+**(b) Correlation**<br>
+Code: `cor.test(Depth, Distance)`<br>
+**(i) Answer:** `-0.986` (or `-0.99`)<br>
+**(ii) Interpretation:** There is a strong negative linear relationship between Tread Depth and Stopping Distance. As tread depth decreases, stopping distance increases.
+
+**(c) Regression Line**<br>
+Code: `lm(Distance ~ Depth)`<br>
+**Answer:** Stopping Distance = 43.944 – 2.376 × Tread Depth
+
+**(d) Estimate**<br>
+Code: `predict(lm(Distance~Depth), newdata=data.frame(Depth=6.2), interval="pred")`<br>
+**Answer:** `29.2` Metres
+</details>
+
+<br>
+
+<details>
+<summary><b>📺 Click here for the Video Solution</b></summary>
+<br>
+Stuck? Watch Mr Clelland walk through this exact question on YouTube:
+<a href="https://www.youtube.com/watch?v=VkJiGeFTw9s&t=848s" target="_blank"><b>👉 Watch the 2026 Q3 Tyres Solution</b></a>
+</details>
+
+<br>
+
+
+### 2025 Paper: Question 5 (Radio)
+A radio station asks their listeners to report how many hours they are listening for one week in July. You must refer to the spreadsheet file `Q5 Radio.csv` for the data.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember to clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+**Setup:**
+Now load the file `Q5 Radio.csv`, attach it, and show the first 6 lines to check the variable names. Type your code below:
+
+```{webr-r}
+
+```
+
+**(a) (i) Construct a histogram to summarise the data.**
+
+```{webr-r}
+
+```
+
+**(a) (ii) Describe the distribution of the data shown in the histogram.**
+*Write your description down on a piece of paper!*
+
+**(a) (iii) Hence, generate and state the appropriate measure of location to summarise the data.**
+*(Hint: Think about your answer to part (ii). Which measure of average is best for that shape?)*
+
+```{webr-r}
+
+```
+
+**The data is then used to determine listening hours last summer.**
+**(b) State one reason why the data might misrepresent the listening hours last summer.**
+*Write your reason down on a piece of paper!*
+
+<br>
+
+#### Check Your Answers
+*Click the boxes below to reveal the answers and video walk-through!*
+
+<details>
+<summary><b>✅ Click here to reveal the written answers</b></summary>
+<br>
+
+**(a) (i) Histogram**<br>
+Code: `hist(hours)`
+
+**(a) (ii) Distribution**<br>
+**Answer:** The data is skewed to the right (positive skew).
+
+**(a) (iii) Measure of Location**<br>
+Because the data is skewed, the mean is affected by outliers. Therefore, the **median** is the most appropriate measure of location.<br>
+Code: `median(hours)`<br>
+**Answer:** `18.7` hours.
+
+**(b) Misrepresentation**<br>
+**Answer:** Any one valid reason, such as:<br>
+* Extrapolation (data is only from one week in July, but applied to the whole summer)<br>
+* Self-recorded (listeners might guess or lie about their hours)<br>
+* Not a random sample (only listeners who chose to respond are included)
+</details>
+
+<br>
+
+<details>
+<summary><b>📺 Click here for the Video Solution</b></summary>
+<br>
+Stuck? Watch Mr Clelland walk through this exact question on YouTube:
+<a href="https://www.youtube.com/watch?v=CPtCgqgoab0&list=PLBO60JrapqvBzytHxUyws5gfhGYWe-283" target="_blank"><b>👉 Watch the 2025 Q5 Radio Solution</b></a>
+</details>
+
+<br>
+
+
+### 2024 Paper: Question 6 (Golf)
+A golf ball manufacturing company has designed a new golf ball which is more hard-wearing. They want to determine whether there is a difference in the distances travelled by the current and new golf balls. A random sample of 40 current and 40 new golf balls were tested. 
+
+The data was found to be **approximately normally distributed**. You must refer to the spreadsheet file `Q6 golf.csv` for the data.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember to clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+**Setup:**
+Now load the file `Q6 golf.csv`, attach it, and show the first 6 lines to check the variable names. Type your code below:
+
+```{webr-r}
+
+```
+
+**(a) (i) Generate and state appropriate measures of location and spread for the current and new golf balls.**
+*(Hint: The question states the data is normally distributed. Which measures are best for normal data?)*
+
+```{webr-r}
+
+```
+
+**(a) (ii) Make two valid comparisons about the driving distances of both the current and new golf balls.**
+*Write your comparisons down on a piece of paper!*
+
+**(b) State appropriate null and alternative hypotheses to determine if there is a statistically significant difference between the distances travelled by the current and new golf balls.**
+*Write these down on paper.*
+
+**(c) (i) State which type of hypothesis test is appropriate to determine if there is a statistically significant difference.**
+*Write this down on paper.*
+
+**(c) (ii) Perform the hypothesis test and state the p-value.**
+
+```{webr-r}
+
+```
+
+**(c) (iii) Hence interpret the p-value, and the result of the hypothesis test, in context.**
+*Write your conclusion down on paper!*
+
+<br>
+
+#### Check Your Answers
+*Click the boxes below to reveal the answers and video walk-through!*
+
+<details>
+<summary><b>✅ Click here to reveal the written answers</b></summary>
+<br>
+
+**(a) (i) Measures of Location & Spread**<br>
+Because the data is normally distributed, we use the **mean** and **standard deviation**. <br>
+Code: `mean(Current)`, `sd(Current)`, `mean(New)`, `sd(New)`<br>
+**Answers:** 
+
+* Current: Mean = 270.275m, SD = 8.75m
+* New: Mean = 267.5m, SD = 9.897m
+
+**(a) (ii) Comparisons**<br>
+
+* On average, the distances travelled by the current golf balls are further (270.275 > 267.5).
+* The distances travelled by the new golf balls are more varied / spread out than the current balls (9.897 > 8.75).
+
+**(b) Hypotheses**<br>
+
+* **Null Hypothesis:** There is no difference in the mean distances travelled by the current and new golf balls.
+* **Alternative Hypothesis:** There is a difference in the mean distances travelled by the current and new golf balls.
+
+**(c) (i) Test Selection**<br>
+An independent (two-sample) t-test.
+
+**(c) (ii) Hypothesis Test**<br>
+Code: `t.test(Current, New)`<br>
+**Answer:** p-value = `0.188`
+
+**(c) (iii) Interpretation**<br>
+The p-value is greater than 0.05 (0.188 > 0.05), therefore we fail to reject the null hypothesis. There is insufficient evidence to suggest a significant difference in the mean distances travelled by the current and new golf balls.
+</details>
+
+<br>
+
+<details>
+<summary><b>📺 Click here for the Video Solution</b></summary>
+<br>
+Stuck? Watch Mr Clelland walk through this exact question on YouTube:
+<a href="https://www.youtube.com/watch?v=tpAnZSEkKgU&t=1532s" target="_blank"><b>👉 Watch the 2024 Q6 Golf Solution</b></a>
+</details>
+
+<br>
+
+
+### 2023 Paper: Question 5 (Coffee)
+A specialist coffee shop sells 22 different drinks. For each drink, the **carbohydrate content** (grams) and **number of calories** (kCals) are provided. 
+
+The number of calories is dependent on the carbohydrate content of the drink. You must refer to the spreadsheet file `Q5 Coffee.csv` for the data.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember to clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+**Setup:**
+Now load the file `Q5 Coffee.csv`, attach it, and show the first 6 lines to check the exact variable names. Type your code below:
+
+```{webr-r}
+
+```
+
+**(a) Construct a scatter plot of number of calories on carbohydrate content.**
+*(Hint: The question says calories are 'dependent' on carbohydrates. This means calories is your y-axis variable, so it goes second in your code!)*
+
+```{webr-r}
+
+```
+
+**(b) (i) Find the correlation coefficient between number of calories and carbohydrate content. (ii) Interpret the correlation coefficient.**
+
+```{webr-r}
+
+```
+*Write your interpretation (b ii) down on a piece of paper!*
+
+**(c) (i) Find the equation of the regression line of number of calories on carbohydrate content.**
+
+```{webr-r}
+
+```
+*Write the equation down on paper.*
+
+**(c) (ii) Interpret the slope and intercept parameters.**
+*(Hint: What does the gradient tell us about calories as carbs increase? What does the intercept tell us about a drink with 0 carbs?)*
+*Write your interpretations down on paper.*
+
+**(d) Estimate the number of calories in a drink which has 59g of carbohydrate.**
+
+```{webr-r}
+
+```
+
+<br>
+
+#### Check Your Answers
+*Click the box below to reveal the written answers!*
+
+<details>
+<summary><b>✅ Click here to reveal the written answers</b></summary>
+<br>
+*(Note: Your exact code will depend on the variable names you saw using `head()`. In these answers, we use `Calories` and `Carbohydrate` as examples).*
+
+**(a) Scatter Plot**<br>
+Code: `plot(Carbohydrate, Calories)`
+
+**(b) Correlation**<br>
+Code: `cor(Carbohydrate, Calories)`<br>
+**(i) Answer:** `0.963` (or `0.96`)<br>
+**(ii) Interpretation:** There is a strong positive linear association between carbohydrate content and calories.
+
+**(c) Regression Line & Interpretation**<br>
+Code: `lm(Calories ~ Carbohydrate)`<br>
+**(i) Equation:** Calories = 73.65 + 4.65 × Carbohydrate <br>
+**(ii) Slope Interpretation:** The number of calories increases by 4.65 kCal for every additional 1 gram of carbohydrate.<br>
+**(ii) Intercept Interpretation:** The number of calories in a drink with 0g carbohydrate content would be 73.65 kCal.
+
+**(d) Estimate**<br>
+Code: `predict(lm(Calories~Carbohydrate), newdata=data.frame(Carbohydrate=59), interval="pred")`<br>
+**Answer:** `348` kCal (using the fitted value).
+</details>
+
+<br>
+
+<details>
+<summary><b>📺 Click here for the Video Solution</b></summary>
+<br>
+Stuck? Watch Mr Clelland walk through this exact question on YouTube:
+<a href="https://www.youtube.com/watch?v=sjQYsyPN6Ds&t=147s" target="_blank"><b>👉 Watch the 2023 Q5 Coffee Solution</b></a>
+</details>
+
+<br>
+
+### 2022 Paper: Question 7 (Jump)
+A strength and conditioning coach wants to increase vertical jump height performance in their trainees. The data in the spreadsheet file shows back squat weight (kg) and vertical jump height (cm). You must refer to the spreadsheet file `Q7 Jump.csv` for the data.
+
+::: {.callout-warning title="🧹 Clear Old Data"}
+Remember to clear the previous data by typing `reset()` and clicking Run:
+:::
+
+```{webr-r}
+
+```
+
+**Setup:**
+Now load the file `Q7 Jump.csv`, attach it, and show the first 6 lines to check the exact variable names. Type your code below:
+
+```{webr-r}
+
+```
+
+**(a) (i) Construct a scatter plot of vertical jump height on back squat weight for the data.**
+*(Hint: Jump height is dependent on back squat weight, so jump height goes on the y-axis (second in the bracket)).*
+
+```{webr-r}
+
+```
+
+**(a) (ii) Make an appropriate comment about the relationship between vertical jump height and back squat weight.**
+*Write your comment down on paper!*
+
+**(b) (i) Find the correlation coefficient between back squat weight and vertical jump height.**
+
+```{webr-r}
+
+```
+
+**(b) (ii) Find the equation of the regression line of vertical jump height on back squat weight.**
+
+```{webr-r}
+
+```
+*Write the equation down on paper.*
+
+**(c) Use your statistical software to estimate the vertical jump height for a trainee who can back squat 165 kg, and comment on the accuracy of the predicted value.**
+
+```{webr-r}
+
+```
+*Write your estimate and comment on accuracy down on paper.*
+
+**Based on the correlation, the coach advises the trainees that increasing their back squat weight will increase their vertical jump height.**
+
+**(d) Explain why the statistical analysis does not support this advice.**
+*Write your explanation down on paper.*
+
+<br>
+
+#### Check Your Answers
+*Click the boxes below to reveal the written answers and video walk-through!*
+
+<details>
+<summary><b>✅ Click here to reveal the written answers</b></summary>
+<br>
+*(Note: Your exact code will depend on the variable names you saw using `head()`. In these answers, we use `jump` and `back` as seen in the SQA marking scheme).*
+
+**(a) (i) Scatter Plot**<br>
+Code: `plot(back, jump)`
+
+**(a) (ii) Relationship**<br>
+**Answer:** There is approximately a positive linear relationship (as back squat weight increases, vertical jump height increases).
+
+**(b) (i) Correlation**<br>
+Code: `cor(back, jump)`<br>
+**Answer:** `0.829` (or `0.828...`)
+
+**(b) (ii) Regression Line**<br>
+Code: `lm(jump ~ back)`<br>
+**Answer:** jump height = 0.36 × back squat + 7.2
+
+**(c) Estimate & Accuracy**<br>
+Code: `predict(lm(jump~back), newdata=data.frame(back=165), interval="pred")`<br>
+**Answer:** `66.5` cm.<br>
+**Accuracy Comment:** The estimate is likely to be accurate/reliable because 165kg is within the range of the given data (this is called interpolation) and there is a strong linear correlation model.
+
+**(d) Coach's Advice**<br>
+**Answer:** Correlation does not imply causation. (Just because two variables are linked numerically doesn't prove that increasing the squat *causes* the jump to increase).
+</details>
+
+<br>
+
+<details>
+<summary><b>📺 Click here for the Video Solution</b></summary>
+<br>
+Stuck? Watch Mr Clelland walk through this exact question on YouTube:
+<a href="https://www.youtube.com/watch?v=NPRdKZ-fHI8" target="_blank"><b>👉 Watch the 2022 Q7 Jump Solution</b></a>
+</details>
+
+<br>
+## ❓ R Studio Troubleshooting
+R Studio can be fussy, especially when you're starting. The number one rule is: **DON'T PANIC! 99% of all errors are small typos.**
+
+### 😟 Problem: "I can't load my file!"
+You get an error like 'cannot open file' or 'No such file or directory'.
+
+*Note: Because we are using WebR in this interactive document, your teacher has already pre-loaded the datasets for you! You do not need to set a working directory.*
+
+If you are still getting file loading errors, try these solutions:
+* **Check the File Name:** R is case-sensitive. "student_data.csv" ≠ "Student_Data.csv"
+* **Add the .csv Extension:** Must include in your code
+* **Check Your Quotes:** Must use straight quotes `""`
+
+### 😟 Problem: "My file is loaded, but mean(Age) doesn't work!"
+You get 'object not found' errors.
+
+💡 **Solutions:**
+* Did you `attach()` the data?
+* Did you `attach()` the right thing? Names must match
+* Check variable spelling with `head()`
+
+### 😟 Problem: "My plot or test command isn't working!"
+💡 **Solutions:**
+* **Comma vs. Tilde (~):** Use `~` for comparisons (like boxplots/models), comma for correlations and scatterplots.
+* **Check Data Types:** Can't calculate mean of categorical data
+* **Check Variable Order:** `lm(Y ~ X)` vs `plot(X, Y)`
+
+## 📚 Official SQA Data Booklet: R Commands {-}
+In your final exam, you will be given a Data Booklet containing these exact commands. 
+
+### Entering data to R Studio {-}
+*Note: To read data in this online workbook, we don't need to "Set Working Directory", and we use our custom `reset()` command instead of `detach()`.*
+
+* `mydata <- read.csv("excel_data.csv")` — reads in data from an Excel csv file
+* `attach(mydata)` — this adds the variable names
+* `detach(mydata)` — disassociates the variable names
+
+### (a) Graphics {-}
+**If you have the numeric variables X and Y:**
+
+* `hist(X, main="Title", xlab="x-axis label", ylab="Frequency")` — produces a histogram of X
+* `boxplot(Y, main="Title", ylab="y-axis label")` — produces a boxplot of Y
+* `boxplot(X,Y, main="Title", xlab="x-axis label", ylab="y-axis label", names=c("X","Y"))` — produces a comparative boxplot of X and Y
+* `plot(X,Y, main="Scatterplot of Y on X", xlab="x-axis label", ylab="y-axis label")` — produces a scatterplot of Y on X
+
+**If you have the categorical variable X:**
+
+* `table(X)` — computes the number of observations in each level of X
+* `pie(table(X), main="Title")` — gives a simple pie chart
+* `barplot(table(X), main="Title", xlab="x-axis label", ylab="Frequency")` — gives a bar chart
+
+### (b) Descriptive Statistics {-}
+
+* `mean(X)` — computes the mean
+* `sd(X)` — computes the standard deviation
+* `summary(X)` — computes the mean, median, minimum, maximum and quartiles
+* `IQR(X)` — computes the interquartile range
+* `prop.table(table(X))` — returns the proportion of observations in each level
+* `prop.table(table(X))*100` — returns the percentage of observations
+* `table(X,Y)` — produces a cross-tabulation between two categorical variables
+
+### (c) Correlation and Regression {-}
+
+* `cor.test(X,Y)` — computes the correlation between X and Y and performs a test of the null hypothesis of zero correlation
+* `lm(Y~X)` — fits a linear regression line to the data
+* `abline(lm(Y~X))` — adds the least squares linear regression line to an existing scatterplot
+* `summary(lm(Y~X))` — displays the coefficient of determination (R-squared)
+* `predict(lm(Y ~ X), newdata=data.frame(X=C), interval = "pred")` — computes the predicted value of Y when X=C along with a 95% prediction interval
+
+### (d) Hypothesis Testing {-}
+
+* `t.test(X,Y)` — performs a two-sample t-test between X and Y
+* `t.test(X,Y, paired=TRUE)` — performs a paired t-test between X and Y
+* `prop.test(x = c(a, b), n = c(n1, n2))` — performs a two-sample test for equality of proportions
+
+---
+
+## 🛠️ Extra Commands (Not in Data Booklet) {-}
+These commands are very useful and are used frequently in this workbook, but they are **not** printed in the official SQA exam booklet:
+
+* `head(mydata)` — Shows the first 6 rows of your data so you can check the exact variable names (Remember: R is case-sensitive!).
+* `boxplot(Numerical ~ Categorical)` — Produces a comparative boxplot split by a category (e.g. `boxplot(Age ~ Gender)`). The official booklet only shows how to plot two separate numeric columns.
+* `cor(X, Y)` — A faster way to just get the correlation coefficient without generating the full `cor.test()` hypothesis output.
+* `median(X)` — Calculates just the median on its own.
+* `reset()` — Our custom workbook command that instantly wipes all old data from R's memory.
+
+## 📌 Important Notes {-}
+
+* **Statistical Significance:** p < 0.05 means statistically significant
+* **Correlation ≠ Causation:** Even strong correlations don't prove cause and effect
+* **Check Assumptions:** Always visualize data (e.g. histograms/scattergraphs) before running tests to ensure it is appropriate to do so.
+
+Good luck with your statistical analysis!
+
+## Other Higher Applications Of Maths Material {-}
+
+* **Clelland Maths Website:** <a href="https://www.clellandmaths.com" target="_blank"><b>👉 Clelland Maths Website</b></a>
+* **Clelland Maths App:** <a href="https://app.clellandmaths.com" target="_blank"><b>👉 Clelland Maths App</b></a>
+* **Clelland Maths Youtube:** <a href="https://www.youtube.com/clellandmaths" target="_blank"><b>👉 Clelland Maths YouTube</b></a>
+
+**Acknowledgments**  
+*While the datasets and interactive coding elements in this workbook are original, the pedagogical structure and sequence are heavily based on R Studio guides developed by Ardrossan Academy.*
